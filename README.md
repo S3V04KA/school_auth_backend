@@ -63,6 +63,8 @@
 <a id="getting-started"></a>
 ## Как начать
 
+#### Документация находится по адресу [http://localhost:8000/docs](http://localhost:8000/docs)
+
 Данный проект не может быть запущен без docker compose из другого репозитория
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
