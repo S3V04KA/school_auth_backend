@@ -36,6 +36,8 @@ def upgrade():
     op.add_column("user", sa.Column("role_id", sa.Integer(), server_default="2", nullable=False))
     op.create_index(op.f("ix_user_role_id"), "user", ["role_id"], unique=False)
     op.create_foreign_key(None, "user", "role", ["role_id"], ["id"])
+    user_table = sa.table("user", sa.column("username", sa.String), sa.column("role_id", sa.Integer))
+    op.execute(user_table.update().where(user_table.c.username == op.inline_literal('admin')).values({'role_id': 1}))
     # ### end Alembic commands ###
 
 
