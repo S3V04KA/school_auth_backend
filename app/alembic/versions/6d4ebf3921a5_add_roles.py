@@ -27,13 +27,13 @@ def upgrade():
     op.bulk_insert(
         role_table,
         [
-            {"name": "user"},
             {"name": "admin"},
+            {"name": "user"},
         ],
     )
     op.create_index(op.f("ix_role_id"), "role", ["id"], unique=False)
     op.create_index(op.f("ix_role_name"), "role", ["name"], unique=True)
-    op.add_column("user", sa.Column("role_id", sa.Integer(), server_default="1", nullable=False))
+    op.add_column("user", sa.Column("role_id", sa.Integer(), server_default="2", nullable=False))
     op.create_index(op.f("ix_user_role_id"), "user", ["role_id"], unique=False)
     op.create_foreign_key(None, "user", "role", ["role_id"], ["id"])
     # ### end Alembic commands ###
