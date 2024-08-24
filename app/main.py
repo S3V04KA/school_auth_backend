@@ -34,6 +34,7 @@ app = FastAPI(
     title=settings.project_name,
     docs_url="/docs",
     redoc_url=None,
+    description='Для выполнения запросов, требующих авторизацию, выполните логин и полученый токен используйте в заголовке запроса Authorization: "Bearer {token}"'
 )
 
 # app.mount("/theme", StaticFiles(directory="./app/static"), name="theme")
