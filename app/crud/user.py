@@ -39,7 +39,7 @@ async def get_users(db_session: AsyncSession) -> list[UserDBModel]:
 async def create_user(db_session: AsyncSession, user: AuthUserSchema) -> UserDBModel:
     password = get_password_hash(user.password)
     del user.password
-    new_user = UserDBModel(**user.model_dump(), hashed_password=password)
+    new_user = UserDBModel(**user.model_dump(), hashed_password=password, role_id=2)
     db_session.add(new_user)
     await db_session.commit()
     await db_session.refresh(new_user)
