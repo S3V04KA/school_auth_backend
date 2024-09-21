@@ -1,19 +1,19 @@
-from fastapi import HTTPException
+import logging
+from typing import Annotated, Any
+from fastapi import Depends, HTTPException
 from app import models
+from app.schemas.user import User
 
-from .user import CurrentUserDep
+from .user import CurrentUserDep, get_current_user
 
+class RoleChecker:
+    def __init__(self, role: str) -> None:
+        self.role = role
+        
+    def __call__(self, current_user: CurrentUserDep) -> bool:
+        return current_user.role.name.lower() == self.role.lower()
 
 async def validate_is_authenticated(
     current_user: CurrentUserDep,
 ) -> models.User:
-    """
-    This just returns as the CurrentUserDep dependency already throws if there is an issue with the auth token.
-    """
-    return current_user
-
-
-async def validate_is_admin(current_user: CurrentUserDep) -> models.User:
-    if current_user.role.name != "admin":
-        raise HTTPException(status_code=403, detail="Not an admin")
     return current_user

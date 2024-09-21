@@ -1,3 +1,4 @@
+import logging
 from typing import Annotated
 
 from app import models
@@ -13,7 +14,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db_ses
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
+        headers={"authorization": "Bearer"},
     )
     try:
         payload = decode_jwt(token)
@@ -23,7 +24,10 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], db_ses
         username = payload.get("username")
         if username is None:
             raise credentials_exception
-        token_data = TokenData(email=email, username=username)
+        id = payload.get("id")
+        if id is None:
+            raise credentials_exception
+        token_data = TokenData(email=email, username=username, id=id)
     except PyJWTError as e:
         raise credentials_exception
     user = await get_user_by_email(db_session, token_data.email)

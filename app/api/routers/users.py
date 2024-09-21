@@ -1,10 +1,10 @@
 from typing import Annotated
 from app.api.dependencies.auth import validate_is_authenticated
 from app.api.dependencies.core import DBSessionDep
-from app.api.dependencies.user import CurrentUserDep, get_current_user
-from app.crud.user import change_password, create_user, get_user, get_user_by_email, get_user_by_username, get_users
-from app.schemas.user import AuthUserSchema, ChangePasswordSchema, User, UserResponse, UserResponseRules, UserSchema
-from fastapi import APIRouter, Depends, HTTPException
+from app.api.dependencies.user import get_current_user
+from app.crud.user import change_password, get_user, get_users
+from app.schemas.user import ChangePasswordSchema, User, UserResponseRules
+from fastapi import APIRouter, Depends
 from app import models
 
 router = APIRouter(
@@ -34,7 +34,7 @@ async def user_details(
 async def users(db_session: DBSessionDep) -> list[UserResponseRules]:
     users = await get_users(db_session)
     return users
-
+    
 
 @router.get("/me", dependencies=[Depends(validate_is_authenticated)], description='Required authentication')
 async def me(user: Annotated[User, Depends(get_current_user)]) -> UserResponseRules:
